@@ -5,8 +5,10 @@ import * as config from "./config";
 import * as endpoint from "./endpoint";
 
 app.listen(config.port, () =>
-  console.log(`[LOG] server listening on port ${config.port}`)
+  console.log(`[API] listening on port ${config.port}`)
 );
+
+app.use(express.static("static"));
 
 app.get("/:dbms/all", (req: any, res: any) => {
   const dbms: string = req.params.dbms;
@@ -34,7 +36,7 @@ app.get("/:dbms/add/:tweet/:user?", (req: any, res: any) => {
   // execute action into dbms
   const returnedStatus: string =
     dbms.localeCompare(acceptedDbms) === 0
-      ? endpoint.endpointAdd[dbms]()
+      ? endpoint.endpointAdd[dbms](tweet, user)
       : "500 ERROR";
 
   res.send({
