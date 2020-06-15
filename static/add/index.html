@@ -14,10 +14,25 @@
   </head>
 
   <body>
-    <p>
-      search: <input id="search" />
-      <br />
-      <button id="submit">submit</button>
-    </p>
+    <label for="dbms">Choose a DBMS:</label>
+    <select name="dbms" id="dbms">
+      <option value="posgres">PostgreSQL</option>
+      <option value="mongodb">MongoDB</option>
+      <option value="solr">Apache Solr</option>
+    </select>
+    <br />
+
+    <label for="tweet">Enter tweet:</label>
+    <input name="tweet" id="tweet" />
+    <br />
+
+    <label for="user">Enter user:</label>
+    <input name="user" id="user" />
+    <br />
+
+    <button id="submit">Publish</button>
+    <hr />
+
+    <p id="response_status"></p>
   </body>
 </html>
