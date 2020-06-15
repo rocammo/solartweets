@@ -1,6 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <title>SOLARTWEETS · Insert New</title>
+
+    <link rel="stylesheet" href="./../style.css" />
+
     <script
       language="javascript"
       type="text/javascript"
@@ -14,25 +19,38 @@
   </head>
 
   <body>
-    <label for="dbms">Choose a DBMS:</label>
-    <select name="dbms" id="dbms">
-      <option value="posgres">PostgreSQL</option>
-      <option value="mongodb">MongoDB</option>
-      <option value="solr">Apache Solr</option>
-    </select>
-    <br />
+    <!-- Navbar -->
+    <p class="navbar">
+      <a href="/">Fetch All</a> | <a href="#">Insert New</a> |
+      <a href="/search">Query</a>
+    </p>
 
-    <label for="tweet">Enter tweet:</label>
-    <input name="tweet" id="tweet" />
-    <br />
+    <!-- Request -->
+    <div class="request">
+      <label for="dbms">Choose a DBMS:</label>
+      <select name="dbms" id="dbms">
+        <option value="posgres">PostgreSQL</option>
+        <option value="mongodb">MongoDB</option>
+        <option value="solr">Apache Solr</option>
+      </select>
+      <br />
 
-    <label for="user">Enter user:</label>
-    <input name="user" id="user" />
-    <br />
+      <label for="tweet">Enter tweet:</label>
+      <input name="tweet" id="tweet" />
+      <br />
 
-    <button id="submit">Publish</button>
+      <label for="user">Enter user:</label>
+      <input name="user" id="user" />
+      <br /><br />
+
+      <button id="submit">Publish</button>
+    </div>
+
     <hr />
 
-    <p id="response_status"></p>
+    <!-- Response -->
+    <div class="response">
+      <p id="response_status"></p>
+    </div>
   </body>
 </html>

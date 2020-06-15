@@ -17,7 +17,7 @@ function getData(json) {
   for (var i = 0; i < json.length; i++) {
     var data = json[i];
 
-    var li = createElement("li", data.tweet);
+    var li = createElement("li", `<b>${data.user}:</b> ${data.tweet}`);
     li.parent("tweets");
   }
 }

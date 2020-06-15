@@ -1,6 +1,11 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <title>SOLARTWEETS · Fetch All</title>
+
+    <link rel="stylesheet" href="./style.css" />
+
     <script
       language="javascript"
       type="text/javascript"
@@ -14,17 +19,30 @@
   </head>
 
   <body>
-    <label for="dbms">Choose a DBMS:</label>
-    <select name="dbms" id="dbms">
-      <option value="posgres">PostgreSQL</option>
-      <option value="mongodb">MongoDB</option>
-      <option value="solr">Apache Solr</option>
-    </select>
-    <br />
+    <!-- Navbar -->
+    <p class="navbar">
+      <a href="#">Fetch All</a> | <a href="/add">Insert New</a> |
+      <a href="/search">Query</a>
+    </p>
 
-    <button id="submit">Fetch</button>
+    <!-- Request -->
+    <div class="request">
+      <label for="dbms">Choose a DBMS:</label>
+      <select name="dbms" id="dbms">
+        <option value="posgres">PostgreSQL</option>
+        <option value="mongodb">MongoDB</option>
+        <option value="solr">Apache Solr</option>
+      </select>
+      <br /><br />
+
+      <button id="submit">Fetch</button>
+    </div>
+
     <hr />
 
-    <p id="tweets"></p>
+    <!-- Response -->
+    <div class="response">
+      <p id="tweets"></p>
+    </div>
   </body>
 </html>
