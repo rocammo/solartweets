@@ -47,6 +47,38 @@ app.get("/:dbms/add/:tweet/:user?", (req: any, res: any) => {
   });
 });
 
+app.get("/:dbms/search/:tweet", (req: any, res: any) => {
+  const dbms: string = req.params.dbms;
+  const tweet: string = req.params.tweet;
+
+  // check wether the dbms is accepted or not
+  const acceptedDbms: string = isDbmsAccepted(dbms);
+
+  // execute action into dbms
+  const data: any =
+    dbms.localeCompare(acceptedDbms) === 0
+      ? endpoint.endpointSearchByTweet[dbms](tweet)
+      : "500 ERROR";
+
+  res.send(data);
+});
+
+app.get("/:dbms/search/:user", (req: any, res: any) => {
+  const dbms: string = req.params.dbms;
+  const user: string = req.params.user;
+
+  // check wether the dbms is accepted or not
+  const acceptedDbms: string = isDbmsAccepted(dbms);
+
+  // execute action into dbms
+  const data: any =
+    dbms.localeCompare(acceptedDbms) === 0
+      ? endpoint.endpointSearchByUser[dbms](user)
+      : "500 ERROR";
+
+  res.send(data);
+});
+
 function isDbmsAccepted(dbms: string): string {
   return endpoint.dbms.indexOf(dbms) >= 0 ? dbms : "404 Not Found";
 }

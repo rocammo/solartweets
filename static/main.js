@@ -7,14 +7,12 @@ function setup() {
 
 function query() {
   var dbms = select("#dbms").value();
-  console.log(dbms);
 
   loadJSON(dbms + "/all", getData);
 }
 
 function getData(json) {
-  var tweets = select("#tweets");
-  console.log(json);
+  var tweets = select("#tweets").html("");
 
   for (var i = 0; i < json.length; i++) {
     var data = json[i];

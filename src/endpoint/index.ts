@@ -16,8 +16,18 @@ const endpointAll: endpointAction = {
       { tweet: "tweet2", user: "user2" },
     ];
   },
-  mongodb: (): any => {},
-  solr: (): any => {},
+  mongodb: (): any => {
+    return [
+      { tweet: "tweet3", user: "user3" },
+      { tweet: "tweet4", user: "user4" },
+    ];
+  },
+  solr: (): any => {
+    return [
+      { tweet: "tweet5", user: "user5" },
+      { tweet: "tweet6", user: "user6" },
+    ];
+  },
 };
 
 const endpointAdd: endpointAction = {
@@ -47,4 +57,52 @@ const endpointAdd: endpointAction = {
   },
 };
 
-export { dbms, endpointAll, endpointAdd };
+const endpointSearchByTweet: endpointAction = {
+  posgres: (tweet: string): any => {
+    return [
+      { tweet: "queried_tweet1", user: "user1" },
+      { tweet: "queried_tweet2", user: "user2" },
+    ];
+  },
+  mongodb: (tweet: string): any => {
+    return [
+      { tweet: "queried_tweet3", user: "user3" },
+      { tweet: "queried_tweet4", user: "user4" },
+    ];
+  },
+  solr: (tweet: string): any => {
+    return [
+      { tweet: "queried_tweet5", user: "user5" },
+      { tweet: "queried_tweet6", user: "user6" },
+    ];
+  },
+};
+
+const endpointSearchByUser: endpointAction = {
+  posgres: (user: string): any => {
+    return [
+      { tweet: "tweet1", user: "queried_user1" },
+      { tweet: "tweet2", user: "queried_user2" },
+    ];
+  },
+  mongodb: (user: string): any => {
+    return [
+      { tweet: "tweet3", user: "queried_user3" },
+      { tweet: "tweet4", user: "queried_user4" },
+    ];
+  },
+  solr: (user: string): any => {
+    return [
+      { tweet: "tweet5", user: "queried_user5" },
+      { tweet: "tweet6", user: "queried_user6" },
+    ];
+  },
+};
+
+export {
+  dbms,
+  endpointAll,
+  endpointAdd,
+  endpointSearchByTweet,
+  endpointSearchByUser,
+};
