@@ -14,16 +14,17 @@
   </head>
 
   <body>
-    <p>
-      <label for="dbms">Choose a DBMS:</label>
-      <select name="dbms" id="dbms">
-        <option value="posgres">PostgreSQL</option>
-        <option value="mongodb">MongoDB</option>
-        <option value="solr">Apache Solr</option>
-      </select>
-      <br />
-      <button id="submit">Fetch</button>
-    </p>
+    <label for="dbms">Choose a DBMS:</label>
+    <select name="dbms" id="dbms">
+      <option value="posgres">PostgreSQL</option>
+      <option value="mongodb">MongoDB</option>
+      <option value="solr">Apache Solr</option>
+    </select>
+    <br />
+
+    <button id="submit">Fetch</button>
+    <hr />
+
     <p id="tweets"></p>
   </body>
 </html>

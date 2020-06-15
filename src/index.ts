@@ -47,7 +47,7 @@ app.get("/:dbms/add/:tweet/:user?", (req: any, res: any) => {
   });
 });
 
-app.get("/:dbms/search/:tweet", (req: any, res: any) => {
+app.get("/:dbms/search/t/:tweet", (req: any, res: any) => {
   const dbms: string = req.params.dbms;
   const tweet: string = req.params.tweet;
 
@@ -63,7 +63,7 @@ app.get("/:dbms/search/:tweet", (req: any, res: any) => {
   res.send(data);
 });
 
-app.get("/:dbms/search/:user", (req: any, res: any) => {
+app.get("/:dbms/search/u/:user", (req: any, res: any) => {
   const dbms: string = req.params.dbms;
   const user: string = req.params.user;
 
