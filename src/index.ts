@@ -13,8 +13,8 @@ app.use(express.static("static"));
 app.get("/:dbms/all", (req: any, res: any) => {
   const dbms: string = req.params.dbms;
 
-  // check wether the dbms is accepted or not
-  const acceptedDbms: string = isDbmsAccepted(dbms);
+  // check wether the dbms is supported or not
+  const acceptedDbms: string = isDbmsSupported(dbms);
 
   // execute action into dbms
   const data: any =
@@ -30,8 +30,8 @@ app.get("/:dbms/add/:tweet/:user?", (req: any, res: any) => {
   const tweet: string = req.params.tweet;
   const user: string = req.params.user ? req.params.user : "anonymous";
 
-  // check wether the dbms is accepted or not
-  const acceptedDbms: string = isDbmsAccepted(dbms);
+  // check wether the dbms is supported or not
+  const acceptedDbms: string = isDbmsSupported(dbms);
 
   // execute action into dbms
   const returnedStatus: string =
@@ -51,8 +51,8 @@ app.get("/:dbms/search/t/:tweet", (req: any, res: any) => {
   const dbms: string = req.params.dbms;
   const tweet: string = req.params.tweet;
 
-  // check wether the dbms is accepted or not
-  const acceptedDbms: string = isDbmsAccepted(dbms);
+  // check wether the dbms is supported or not
+  const acceptedDbms: string = isDbmsSupported(dbms);
 
   // execute action into dbms
   const data: any =
@@ -67,8 +67,8 @@ app.get("/:dbms/search/u/:user", (req: any, res: any) => {
   const dbms: string = req.params.dbms;
   const user: string = req.params.user;
 
-  // check wether the dbms is accepted or not
-  const acceptedDbms: string = isDbmsAccepted(dbms);
+  // check wether the dbms is supported or not
+  const acceptedDbms: string = isDbmsSupported(dbms);
 
   // execute action into dbms
   const data: any =
@@ -79,6 +79,6 @@ app.get("/:dbms/search/u/:user", (req: any, res: any) => {
   res.send(data);
 });
 
-function isDbmsAccepted(dbms: string): string {
+function isDbmsSupported(dbms: string): string {
   return endpoint.dbms.indexOf(dbms) >= 0 ? dbms : "404 Not Found";
 }

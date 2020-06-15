@@ -1,14 +1,25 @@
+/**
+ * List of supported dbms.
+ */
 const dbms: String[] = ["posgres", "mongodb", "solr"];
 
+/**
+ * Interface to be implemented in all endpoints for the different actions.
+ * --
+ *
+ * READ_ONLY (operations)
+ * @returns {any} entire dbms response.
+ *
+ * WRITE_ONLY (operations)
+ * @returns {string} status of whether the operation went well or badly.
+ */
 interface endpointAction {
-  /**
-   * READ_ONLY operations return the entire dbms response.
-   * WRITE_ONLY operations return a status code of whether the operation went
-   *    well or badly.
-   */
   [indexer: string]: (tweet?: string, user?: string) => any;
 }
 
+/**
+ * Endpoint action to retrieve all data.
+ */
 const endpointAll: endpointAction = {
   posgres: (): any => {
     console.log(`[POSGRES] endpointAll`);
@@ -36,6 +47,9 @@ const endpointAll: endpointAction = {
   },
 };
 
+/**
+ * Endpoint action to insert new data.
+ */
 const endpointAdd: endpointAction = {
   posgres: (tweet: string, user: string): string => {
     console.log(`[POSGRES] endpointAdd <- {tweet: ${tweet}, user: ${user}}`);
@@ -63,6 +77,9 @@ const endpointAdd: endpointAction = {
   },
 };
 
+/**
+ * Endpoint action to search by queried tweet.
+ */
 const endpointSearchByTweet: endpointAction = {
   posgres: (tweet: string): any => {
     console.log(`[POSGRES] endpointSearchByTweet <- {tweet: ${tweet}}`);
@@ -90,6 +107,9 @@ const endpointSearchByTweet: endpointAction = {
   },
 };
 
+/**
+ * Endpoint action to search by queried user.
+ */
 const endpointSearchByUser: endpointAction = {
   posgres: (user: string): any => {
     console.log(`[POSGRES] endpointSearchByUser <- {user: ${user}}`);
