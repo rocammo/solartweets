@@ -1,0 +1,40 @@
+version: "3.7"
+services:
+  postgres:
+    image: postgres
+    container_name: posgres
+    environment:
+      POSTGRES_USER: posgres
+      POSTGRES_PASSWORD: posgres
+      POSTGRES_DB: tweets
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres:/var/lib/postgresql/data
+    restart: unless-stopped
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: mongodb
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb:/data/db
+    restart: unless-stopped
+  solr:
+    image: solr
+    container_name: solr
+    command:
+      - solr-precreate
+      - gettingstarted
+    ports:
+      - "8983:8983"
+    volumes:
+      - solr:/var/solr
+    restart: unless-stopped
+volumes:
+  postgres:
+  mongodb:
+  solr:
