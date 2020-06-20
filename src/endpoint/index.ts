@@ -1,6 +1,7 @@
-import { posgresConnection } from "../config";
+import { posgresConnection, mongodbConnection } from "../config";
 
 const { Client } = require("pg");
+const MongoClient = require("mongodb").MongoClient;
 
 /**
  * List of supported DBMS.
@@ -131,13 +132,33 @@ const endpointSearchByTweet: endpointAction = {
 
     return response;
   },
-  mongodb: (tweet: string): any => {
+  mongodb: async (tweet: string): Promise<responseType[]> => {
     console.log(`[MONGODB] endpointSearchByTweet <- {tweet: ${tweet}}`);
 
-    return [
-      { tweet: "queried_tweet3", user: "user3" },
-      { tweet: "queried_tweet4", user: "user4" },
-    ];
+    const client = new MongoClient(mongodbConnection);
+    const response: responseType[] = await new Promise((resolve, reject) => {
+      client.connect((err) => {
+        const db = client.db("solartweets");
+        const collection = db.collection("tweets");
+
+        collection
+          .find({ text: { $regex: `.*${tweet}.*` } })
+          .toArray((err, docs) => {
+            if (err) reject(err);
+
+            let res: responseType[] = new Array(docs.length);
+            for (let i = 0; i < res.length; i++) {
+              res[i] = { tweet: docs[i].text, user: docs[i].userName };
+            }
+
+            resolve(res);
+          });
+
+        client.close();
+      });
+    });
+
+    return response;
   },
   solr: (tweet: string): any => {
     console.log(`[SOLR] endpointSearchByTweet <- {tweet: ${tweet}}`);
@@ -170,13 +191,33 @@ const endpointSearchByUser: endpointAction = {
 
     return response;
   },
-  mongodb: (user: string): any => {
+  mongodb: async (user: string): Promise<responseType[]> => {
     console.log(`[MONGODB] endpointSearchByUser <- {user: ${user}}`);
 
-    return [
-      { tweet: "tweet3", user: "queried_user3" },
-      { tweet: "tweet4", user: "queried_user4" },
-    ];
+    const client = new MongoClient(mongodbConnection);
+    const response: responseType[] = await new Promise((resolve, reject) => {
+      client.connect((err) => {
+        const db = client.db("solartweets");
+        const collection = db.collection("tweets");
+
+        collection
+          .find({ userName: { $regex: `.*${user}.*` } })
+          .toArray((err, docs) => {
+            if (err) reject(err);
+
+            let res: responseType[] = new Array(docs.length);
+            for (let i = 0; i < res.length; i++) {
+              res[i] = { tweet: docs[i].text, user: docs[i].userName };
+            }
+
+            resolve(res);
+          });
+
+        client.close();
+      });
+    });
+
+    return response;
   },
   solr: (user: string): any => {
     console.log(`[SOLR] endpointSearchByUser <- {user: ${user}}`);

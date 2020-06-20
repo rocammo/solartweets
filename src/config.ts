@@ -5,4 +5,7 @@ const port: number = Number(process.env.PORT) || 3000;
 const posgresConnection: string =
   "postgressql://posgres:posgres@localhost:5432/tweets";
 
-export { port, posgresConnection };
+// MONGODB
+const mongodbConnection: string = "mongodb://mongodb:mongodb@localhost:27017";
+
+export { port, posgresConnection, mongodbConnection };
