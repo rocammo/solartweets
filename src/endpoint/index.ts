@@ -33,9 +33,7 @@ const endpointAll: endpointAction = {
   posgres: async (): Promise<responseType[]> => {
     console.log(`[POSGRES] endpointAll`);
 
-    const client = new Client({
-      connectionString: posgresConnection,
-    });
+    const client = new Client({ connectionString: posgresConnection });
     await client.connect();
     const res = await client.query("SELECT * from tweets");
 
@@ -70,11 +68,27 @@ const endpointAll: endpointAction = {
  * Endpoint action to insert new data.
  */
 const endpointAdd: endpointAction = {
-  posgres: (tweet: string, user: string): string => {
+  posgres: async (tweet: string, user: string): Promise<string> => {
     console.log(`[POSGRES] endpointAdd <- {tweet: ${tweet}, user: ${user}}`);
 
     let status: string;
-    status = "200 OK";
+
+    const client = new Client({ connectionString: posgresConnection });
+    await client.connect();
+
+    try {
+      const res = await client.query(
+        "INSERT INTO tweets(id, text, userName) VALUES($1, $2, $3) RETURNING *",
+        [ID(), tweet, user]
+      );
+      // console.log(res.rows[0]);
+      status = "200 OK";
+    } catch (err) {
+      // console.log(err.stack);
+      status = "500 ERROR";
+    }
+
+    await client.end();
 
     return status;
   },
@@ -103,9 +117,7 @@ const endpointSearchByTweet: endpointAction = {
   posgres: async (tweet: string): Promise<responseType[]> => {
     console.log(`[POSGRES] endpointSearchByTweet <- {tweet: ${tweet}}`);
 
-    const client = new Client({
-      connectionString: posgresConnection,
-    });
+    const client = new Client({ connectionString: posgresConnection });
     await client.connect();
     const res = await client.query("SELECT * from tweets");
 
@@ -144,9 +156,7 @@ const endpointSearchByUser: endpointAction = {
   posgres: async (user: string): Promise<responseType[]> => {
     console.log(`[POSGRES] endpointSearchByUser <- {user: ${user}}`);
 
-    const client = new Client({
-      connectionString: posgresConnection,
-    });
+    const client = new Client({ connectionString: posgresConnection });
     await client.connect();
     const res = await client.query("SELECT * from tweets");
 
@@ -176,6 +186,13 @@ const endpointSearchByUser: endpointAction = {
       { tweet: "tweet6", user: "queried_user6" },
     ];
   },
+};
+
+const ID = function () {
+  // Math.random should be unique because of its seeding algorithm.
+  // Convert it to base 36 (numbers + letters), and grab the first 9 characters
+  // after the decimal.
+  return "_" + Math.random().toString(36).substr(2, 9);
 };
 
 export {

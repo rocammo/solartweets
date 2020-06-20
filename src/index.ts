@@ -25,7 +25,7 @@ app.get("/:dbms/all", async (req: any, res: any) => {
   res.send(data);
 });
 
-app.get("/:dbms/add/:tweet/:user?", (req: any, res: any) => {
+app.get("/:dbms/add/:tweet/:user?", async (req: any, res: any) => {
   const dbms: string = req.params.dbms;
   const tweet: string = req.params.tweet;
   const user: string = req.params.user ? req.params.user : "anonymous";
@@ -36,7 +36,7 @@ app.get("/:dbms/add/:tweet/:user?", (req: any, res: any) => {
   // execute action into dbms
   const returnedStatus: string =
     dbms.localeCompare(acceptedDbms) === 0
-      ? endpoint.endpointAdd[dbms](tweet, user)
+      ? await endpoint.endpointAdd[dbms](tweet, user)
       : "500 ERROR";
 
   res.send({

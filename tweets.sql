@@ -1,27 +1,27 @@
 DROP TABLE IF EXISTS tweets;
 CREATE TABLE tweets(
-   date                 VARCHAR(20) NOT NULL
+   date                 VARCHAR(20)
   ,placeFullName        VARCHAR(29)
-  ,utcOffset            INTEGER  NOT NULL
+  ,utcOffset            INTEGER
   ,latitude             NUMERIC(12,8)
-  ,collectorID          VARCHAR(7) NOT NULL
-  ,language             VARCHAR(3) NOT NULL
-  ,source               VARCHAR(40) NOT NULL
+  ,collectorID          VARCHAR(7)
+  ,language             VARCHAR(3)
+  ,source               VARCHAR(40)
   ,userName             VARCHAR(20) NOT NULL
-  ,url                  VARCHAR(66) NOT NULL
-  ,currentUserRetweetId INTEGER  NOT NULL
-  ,createdAt            VARCHAR(11) NOT NULL
+  ,url                  VARCHAR(66)
+  ,currentUserRetweetId INTEGER
+  ,createdAt            VARCHAR(11)
   ,urls0                VARCHAR(160)
   ,hashtagEntities0     VARCHAR(26)
-  ,search               VARCHAR(6) NOT NULL
-  ,userScreenName       VARCHAR(15) NOT NULL
+  ,search               VARCHAR(6)
+  ,userScreenName       VARCHAR(15)
   ,id                   VARCHAR(18) NOT NULL PRIMARY KEY
   ,text                 VARCHAR(281) NOT NULL
-  ,retweets             INTEGER  NOT NULL
-  ,timestamp            VARCHAR(13) NOT NULL
+  ,retweets             INTEGER
+  ,timestamp            VARCHAR(13)
   ,longitude            NUMERIC(12,8)
-  ,isRetweet            VARCHAR(5) NOT NULL
-  ,likes                INTEGER  NOT NULL
+  ,isRetweet            VARCHAR(5)
+  ,likes                INTEGER
   ,hashtagEntities1     VARCHAR(17)
   ,hashtagEntities2     VARCHAR(17)
   ,hashtagEntities3     VARCHAR(11)
