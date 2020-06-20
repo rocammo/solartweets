@@ -47,7 +47,7 @@ app.get("/:dbms/add/:tweet/:user?", (req: any, res: any) => {
   });
 });
 
-app.get("/:dbms/search/t/:tweet", (req: any, res: any) => {
+app.get("/:dbms/search/t/:tweet", async (req: any, res: any) => {
   const dbms: string = req.params.dbms;
   const tweet: string = req.params.tweet;
 
@@ -57,13 +57,13 @@ app.get("/:dbms/search/t/:tweet", (req: any, res: any) => {
   // execute action into dbms
   const data: any =
     dbms.localeCompare(acceptedDbms) === 0
-      ? endpoint.endpointSearchByTweet[dbms](tweet)
+      ? await endpoint.endpointSearchByTweet[dbms](tweet)
       : "500 ERROR";
 
   res.send(data);
 });
 
-app.get("/:dbms/search/u/:user", (req: any, res: any) => {
+app.get("/:dbms/search/u/:user", async (req: any, res: any) => {
   const dbms: string = req.params.dbms;
   const user: string = req.params.user;
 
@@ -73,7 +73,7 @@ app.get("/:dbms/search/u/:user", (req: any, res: any) => {
   // execute action into dbms
   const data: any =
     dbms.localeCompare(acceptedDbms) === 0
-      ? endpoint.endpointSearchByUser[dbms](user)
+      ? await endpoint.endpointSearchByUser[dbms](user)
       : "500 ERROR";
 
   res.send(data);

@@ -100,13 +100,24 @@ const endpointAdd: endpointAction = {
  * Endpoint action to search by queried tweet.
  */
 const endpointSearchByTweet: endpointAction = {
-  posgres: (tweet: string): any => {
+  posgres: async (tweet: string): Promise<responseType[]> => {
     console.log(`[POSGRES] endpointSearchByTweet <- {tweet: ${tweet}}`);
 
-    return [
-      { tweet: "queried_tweet1", user: "user1" },
-      { tweet: "queried_tweet2", user: "user2" },
-    ];
+    const client = new Client({
+      connectionString: posgresConnection,
+    });
+    await client.connect();
+    const res = await client.query("SELECT * from tweets");
+
+    let response: responseType[] = new Array(res.rows.length);
+    for (let i = 0, j = 0; i < response.length; i++) {
+      if (res.rows[i].text.includes(tweet))
+        response[j++] = { tweet: res.rows[i].text, user: res.rows[i].username };
+    }
+
+    await client.end();
+
+    return response;
   },
   mongodb: (tweet: string): any => {
     console.log(`[MONGODB] endpointSearchByTweet <- {tweet: ${tweet}}`);
@@ -130,13 +141,24 @@ const endpointSearchByTweet: endpointAction = {
  * Endpoint action to search by queried user.
  */
 const endpointSearchByUser: endpointAction = {
-  posgres: (user: string): any => {
+  posgres: async (user: string): Promise<responseType[]> => {
     console.log(`[POSGRES] endpointSearchByUser <- {user: ${user}}`);
 
-    return [
-      { tweet: "tweet1", user: "queried_user1" },
-      { tweet: "tweet2", user: "queried_user2" },
-    ];
+    const client = new Client({
+      connectionString: posgresConnection,
+    });
+    await client.connect();
+    const res = await client.query("SELECT * from tweets");
+
+    let response: responseType[] = new Array(res.rows.length);
+    for (let i = 0, j = 0; i < response.length; i++) {
+      if (res.rows[i].username.includes(user))
+        response[j++] = { tweet: res.rows[i].text, user: res.rows[i].username };
+    }
+
+    await client.end();
+
+    return response;
   },
   mongodb: (user: string): any => {
     console.log(`[MONGODB] endpointSearchByUser <- {user: ${user}}`);
