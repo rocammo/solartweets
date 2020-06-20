@@ -47,13 +47,33 @@ const endpointAll: endpointAction = {
 
     return response;
   },
-  mongodb: (): any => {
+  mongodb: async (): Promise<responseType[]> => {
     console.log(`[MONGODB] endpointAll`);
 
-    return [
-      { tweet: "tweet3", user: "user3" },
-      { tweet: "tweet4", user: "user4" },
-    ];
+    const client = new MongoClient(mongodbConnection);
+    const response: responseType[] = await new Promise((resolve, reject) => {
+      client.connect((err) => {
+        if (err) reject(err);
+
+        const db = client.db("solartweets");
+        const collection = db.collection("tweets");
+
+        collection.find({}).toArray((err, docs) => {
+          if (err) reject(err);
+
+          let res: responseType[] = new Array(docs.length);
+          for (let i = 0; i < res.length; i++) {
+            res[i] = { tweet: docs[i].text, user: docs[i].userName };
+          }
+
+          resolve(res);
+        });
+
+        client.close();
+      });
+    });
+
+    return response;
   },
   solr: (): any => {
     console.log(`[SOLR] endpointAll`);
@@ -138,6 +158,8 @@ const endpointSearchByTweet: endpointAction = {
     const client = new MongoClient(mongodbConnection);
     const response: responseType[] = await new Promise((resolve, reject) => {
       client.connect((err) => {
+        if (err) reject(err);
+
         const db = client.db("solartweets");
         const collection = db.collection("tweets");
 
@@ -197,6 +219,8 @@ const endpointSearchByUser: endpointAction = {
     const client = new MongoClient(mongodbConnection);
     const response: responseType[] = await new Promise((resolve, reject) => {
       client.connect((err) => {
+        if (err) reject(err);
+
         const db = client.db("solartweets");
         const collection = db.collection("tweets");
 
