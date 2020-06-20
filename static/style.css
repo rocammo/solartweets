@@ -30,6 +30,7 @@ body {
 .response {
   background-color: #ecf0f1;
   border-radius: 5px;
+  margin-bottom: 45px;
 }
 
 .response p {
@@ -38,4 +39,31 @@ body {
 
 .response li {
   list-style-type: none;
+}
+
+.footer {
+  background-color: #ffffff;
+  bottom: 0;
+  color: #ffffff;
+  left: 0;
+  position: fixed;
+  text-align: center;
+  width: 100%;
+}
+
+.footer p {
+  color: #7f8c8d;
+}
+
+.footer a {
+  border-radius: 2px;
+  color: #3498db;
+  font-size: small;
+  padding: 2px;
+  text-decoration: none;
+}
+
+.footer a:hover {
+  background-color: #3498db;
+  color: #ffffff;
 }
