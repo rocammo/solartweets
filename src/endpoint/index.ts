@@ -2,6 +2,13 @@ import { posgresConnection, mongodbConnection } from "../config";
 
 const { Client } = require("pg");
 const MongoClient = require("mongodb").MongoClient;
+const SolrNode = require("solr-node");
+const solrClient = new SolrNode({
+  host: "127.0.0.1",
+  port: "8983",
+  core: "solartweets",
+  protocol: "http",
+});
 
 /**
  * List of supported DBMS.
@@ -77,13 +84,36 @@ const endpointAll: endpointAction = {
 
     return response;
   },
-  solr: (): any => {
+  solr: async (): Promise<responseType[]> => {
     console.log(`[SOLR] endpointAll`);
 
-    return [
-      { tweet: "tweet5", user: "user5" },
-      { tweet: "tweet6", user: "user6" },
-    ];
+    let query = solrClient.query().q({});
+    const rows: number = await new Promise((resolve, reject) => {
+      solrClient.search(query, function (err, result) {
+        if (err) reject(err);
+
+        resolve(result.response.numFound);
+      });
+    });
+
+    query = solrClient.query().q({}).rows(rows);
+    const response: responseType[] = await new Promise((resolve, reject) => {
+      solrClient.search(query, function (err, result) {
+        if (err) reject(err);
+
+        let res: responseType[] = new Array(result.response.docs.length);
+        for (let i = 0; i < res.length; i++) {
+          res[i] = {
+            tweet: result.response.docs[i].text[0],
+            user: result.response.docs[i].userName[0],
+          };
+        }
+
+        resolve(res);
+      });
+    });
+
+    return response;
   },
 };
 
@@ -205,13 +235,36 @@ const endpointSearchByTweet: endpointAction = {
 
     return response;
   },
-  solr: (tweet: string): any => {
+  solr: async (tweet: string): Promise<responseType[]> => {
     console.log(`[SOLR] endpointSearchByTweet <- {tweet: ${tweet}}`);
 
-    return [
-      { tweet: "queried_tweet5", user: "user5" },
-      { tweet: "queried_tweet6", user: "user6" },
-    ];
+    let query = solrClient.query().q({});
+    const rows: number = await new Promise((resolve, reject) => {
+      solrClient.search(query, function (err, result) {
+        if (err) reject(err);
+
+        resolve(result.response.numFound);
+      });
+    });
+
+    query = solrClient.query().q({ text: tweet }).rows(rows);
+    const response: responseType[] = await new Promise((resolve, reject) => {
+      solrClient.search(query, function (err, result) {
+        if (err) reject(err);
+
+        let res: responseType[] = new Array(result.response.docs.length);
+        for (let i = 0; i < res.length; i++) {
+          res[i] = {
+            tweet: result.response.docs[i].text[0],
+            user: result.response.docs[i].userName[0],
+          };
+        }
+
+        resolve(res);
+      });
+    });
+
+    return response;
   },
 };
 
@@ -268,13 +321,36 @@ const endpointSearchByUser: endpointAction = {
 
     return response;
   },
-  solr: (user: string): any => {
+  solr: async (user: string): Promise<responseType[]> => {
     console.log(`[SOLR] endpointSearchByUser <- {user: ${user}}`);
 
-    return [
-      { tweet: "tweet5", user: "queried_user5" },
-      { tweet: "tweet6", user: "queried_user6" },
-    ];
+    let query = solrClient.query().q({});
+    const rows: number = await new Promise((resolve, reject) => {
+      solrClient.search(query, function (err, result) {
+        if (err) reject(err);
+
+        resolve(result.response.numFound);
+      });
+    });
+
+    query = solrClient.query().q({ userName: user }).rows(rows);
+    const response: responseType[] = await new Promise((resolve, reject) => {
+      solrClient.search(query, function (err, result) {
+        if (err) reject(err);
+
+        let res: responseType[] = new Array(result.response.docs.length);
+        for (let i = 0; i < res.length; i++) {
+          res[i] = {
+            tweet: result.response.docs[i].text[0],
+            user: result.response.docs[i].userName[0],
+          };
+        }
+
+        resolve(res);
+      });
+    });
+
+    return response;
   },
 };
 
