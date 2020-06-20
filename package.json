@@ -1,6 +1,6 @@
 {
-  "name": "node-with-typescript",
-  "version": "0.0.0",
+  "name": "solartweets",
+  "version": "1.0.0",
   "description": "",
   "main": "src/index.ts",
   "scripts": {
