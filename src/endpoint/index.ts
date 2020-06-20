@@ -1,14 +1,18 @@
+import { posgresConnection } from "../config";
+
+const { Client } = require("pg");
+
 /**
- * List of supported dbms.
+ * List of supported DBMS.
  */
-const dbms: String[] = ["posgres", "mongodb", "solr"];
+const DBMS: String[] = ["posgres", "mongodb", "solr"];
 
 /**
  * Interface to be implemented in all endpoints for the different actions.
  * --
  *
  * READ_ONLY (operations)
- * @returns {any} entire dbms response.
+ * @returns {any} entire DBMS response.
  *
  * WRITE_ONLY (operations)
  * @returns {string} status of whether the operation went well or badly.
@@ -17,17 +21,32 @@ interface endpointAction {
   [indexer: string]: (tweet?: string, user?: string) => any;
 }
 
+interface responseType {
+  tweet: string;
+  user: string;
+}
+
 /**
  * Endpoint action to retrieve all data.
  */
 const endpointAll: endpointAction = {
-  posgres: (): any => {
+  posgres: async (): Promise<responseType[]> => {
     console.log(`[POSGRES] endpointAll`);
 
-    return [
-      { tweet: "tweet1", user: "user1" },
-      { tweet: "tweet2", user: "user2" },
-    ];
+    const client = new Client({
+      connectionString: posgresConnection,
+    });
+    await client.connect();
+    const res = await client.query("SELECT * from tweets");
+
+    let response: responseType[] = new Array(res.rows.length);
+    for (let i = 0; i < response.length; i++) {
+      response[i] = { tweet: res.rows[i].text, user: res.rows[i].username };
+    }
+
+    await client.end();
+
+    return response;
   },
   mongodb: (): any => {
     console.log(`[MONGODB] endpointAll`);
@@ -138,7 +157,7 @@ const endpointSearchByUser: endpointAction = {
 };
 
 export {
-  dbms,
+  DBMS,
   endpointAll,
   endpointAdd,
   endpointSearchByTweet,

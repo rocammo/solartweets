@@ -10,7 +10,7 @@ app.listen(config.port, () =>
 
 app.use(express.static("static"));
 
-app.get("/:dbms/all", (req: any, res: any) => {
+app.get("/:dbms/all", async (req: any, res: any) => {
   const dbms: string = req.params.dbms;
 
   // check wether the dbms is supported or not
@@ -19,7 +19,7 @@ app.get("/:dbms/all", (req: any, res: any) => {
   // execute action into dbms
   const data: any =
     dbms.localeCompare(acceptedDbms) === 0
-      ? endpoint.endpointAll[dbms]()
+      ? await endpoint.endpointAll[dbms]()
       : "500 ERROR";
 
   res.send(data);
@@ -80,5 +80,5 @@ app.get("/:dbms/search/u/:user", (req: any, res: any) => {
 });
 
 function isDbmsSupported(dbms: string): string {
-  return endpoint.dbms.indexOf(dbms) >= 0 ? dbms : "404 Not Found";
+  return endpoint.DBMS.indexOf(dbms) >= 0 ? dbms : "404 Not Found";
 }
