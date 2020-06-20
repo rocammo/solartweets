@@ -28,7 +28,7 @@ services:
     container_name: solr
     command:
       - solr-precreate
-      - gettingstarted
+      - solartweets
     ports:
       - "8983:8983"
     volumes:

@@ -23,8 +23,9 @@ echo "\n[ OK ]"
 echo "========================================\n\n"
 
 # Solr
-# docker cp ./tweets.json solr:/opt/solr-8.5.2/example/exampledocs
-
-# docker-compose run postgres <command>
-# docker-compose run mongodb <command>
-# docker-compose run solr <command>
+echo "Solr dump..."
+echo "========================================"
+docker cp ./tweets.json solr:/var/solr/data/solartweets/data
+curl 'http://localhost:8983/solr/solartweets/update/json?commit=true' --data-binary @tweets.json -H 'Content-type:application/json'
+echo "\n[ OK ]"
+echo "========================================\n"
