@@ -176,6 +176,17 @@ const endpointAdd: endpointAction = {
     console.log(`[SOLR] endpointAdd <- {tweet: ${tweet}, user: ${user}}`);
 
     let status: string;
+
+    const data = {
+      text: [tweet],
+      userName: [user],
+      date: [DATE()],
+      retweets: [0],
+      likes: [0],
+    };
+
+    solrClient.update(data, () => {});
+
     status = "200 OK";
 
     return status;
