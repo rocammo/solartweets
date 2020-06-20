@@ -50,7 +50,9 @@ const endpointAll: endpointAction = {
   mongodb: async (): Promise<responseType[]> => {
     console.log(`[MONGODB] endpointAll`);
 
-    const client = new MongoClient(mongodbConnection);
+    const client = new MongoClient(mongodbConnection, {
+      useUnifiedTopology: true,
+    });
     const response: responseType[] = await new Promise((resolve, reject) => {
       client.connect((err) => {
         if (err) reject(err);
@@ -67,9 +69,9 @@ const endpointAll: endpointAction = {
           }
 
           resolve(res);
-        });
 
-        client.close();
+          client.close();
+        });
       });
     });
 
@@ -113,10 +115,29 @@ const endpointAdd: endpointAction = {
 
     return status;
   },
-  mongodb: (tweet: string, user: string): string => {
+  mongodb: async (tweet: string, user: string): Promise<string> => {
     console.log(`[MONGODB] endpointAdd <- {tweet: ${tweet}, user: ${user}}`);
 
     let status: string;
+
+    const client = new MongoClient(mongodbConnection, {
+      useUnifiedTopology: true,
+    });
+    client.connect((err) => {
+      const db = client.db("solartweets");
+      const collection = db.collection("tweets");
+
+      collection.insertOne({
+        text: tweet,
+        userName: user,
+        date: DATE(),
+        retweets: 0,
+        likes: 0,
+      });
+
+      client.close();
+    });
+
     status = "200 OK";
 
     return status;
@@ -155,7 +176,9 @@ const endpointSearchByTweet: endpointAction = {
   mongodb: async (tweet: string): Promise<responseType[]> => {
     console.log(`[MONGODB] endpointSearchByTweet <- {tweet: ${tweet}}`);
 
-    const client = new MongoClient(mongodbConnection);
+    const client = new MongoClient(mongodbConnection, {
+      useUnifiedTopology: true,
+    });
     const response: responseType[] = await new Promise((resolve, reject) => {
       client.connect((err) => {
         if (err) reject(err);
@@ -174,9 +197,9 @@ const endpointSearchByTweet: endpointAction = {
             }
 
             resolve(res);
-          });
 
-        client.close();
+            client.close();
+          });
       });
     });
 
@@ -216,7 +239,9 @@ const endpointSearchByUser: endpointAction = {
   mongodb: async (user: string): Promise<responseType[]> => {
     console.log(`[MONGODB] endpointSearchByUser <- {user: ${user}}`);
 
-    const client = new MongoClient(mongodbConnection);
+    const client = new MongoClient(mongodbConnection, {
+      useUnifiedTopology: true,
+    });
     const response: responseType[] = await new Promise((resolve, reject) => {
       client.connect((err) => {
         if (err) reject(err);
@@ -235,9 +260,9 @@ const endpointSearchByUser: endpointAction = {
             }
 
             resolve(res);
-          });
 
-        client.close();
+            client.close();
+          });
       });
     });
 
@@ -253,11 +278,38 @@ const endpointSearchByUser: endpointAction = {
   },
 };
 
-const ID = function () {
+const ID = () => {
   // Math.random should be unique because of its seeding algorithm.
   // Convert it to base 36 (numbers + letters), and grab the first 9 characters
   // after the decimal.
   return "_" + Math.random().toString(36).substr(2, 9);
+};
+
+const DATE = () => {
+  let date_ob = new Date();
+
+  // adjust 0 before single digit date
+  let date = ("0" + date_ob.getDate()).slice(-2); // current date
+  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2); // current month
+  let year = date_ob.getFullYear(); // current year
+  let hours = date_ob.getHours(); // current hours
+  let minutes = date_ob.getMinutes(); // current minutes
+  let seconds = date_ob.getSeconds(); // current seconds
+
+  return (
+    year +
+    "-" +
+    month +
+    "-" +
+    date +
+    "T" +
+    hours +
+    ":" +
+    minutes +
+    ":" +
+    seconds +
+    "Z"
+  );
 };
 
 export {
